@@ -1,0 +1,8 @@
+how and what Caesar POSTs to do a class search, how each search criteria is in this POST:
+found out that this is unnecessary to find out as i dont need to mess with the search post
+
+the response from this search POST that gives the data for the results:
+POST returns the HTML for the results that are displayed in an iframe
+
+The POST when a result is selected and the response that give the info for that result:
+POST returns the HTML for the selection that are displayed in an iframe
