@@ -103,7 +103,7 @@ function onItemChanged(){
         var index=1;
         iframe.contentWindow.document.getElementById("bookmarks").innerHTML=``;
         for (const [key, value] of Object.entries(result)) {
-            const subject= iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SUBJECT_SRCH$0").options[value[0]].text.match(/\b[A-Z]+(?:\s+[A-Z]+)*\b/);
+            const subject= iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SUBJECT_SRCH$0").options[value[0]].text.match(/\b[A-Z\_]+(?:\s+[A-Z\_]+)*\b/);
             var match;
             if(value[1]==1){
                 match="contains";
