@@ -91,9 +91,9 @@ function loadButton(){
 }
 function removeButton(){
     
-    const remove_ind=iframe.contentWindow.document.getElementById("bookmarks").selectedIndex+1;
-    console.log('remove '+remove_ind)
-    chrome.storage.local.remove(remove_ind.toString());
+    const remove_ind=iframe.contentWindow.document.getElementById("bookmarks").options[iframe.contentWindow.document.getElementById("bookmarks").selectedIndex].value.split(',')[6];
+    console.log('remove '+remove_ind);
+    chrome.storage.local.remove(remove_ind);
 }
 function onItemChanged(){
     console.log("changed");
@@ -119,6 +119,7 @@ function onItemChanged(){
             }
             //const match= iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_EXACT_MATCH1$1").options[value[1]].text;
             const number=value[2];
+            value.push(key)
             iframe.contentWindow.document.getElementById("bookmarks").innerHTML+=`<option value="${value}">${subject} ${match} ${number}</option>`;
             index=index+1;
         };
