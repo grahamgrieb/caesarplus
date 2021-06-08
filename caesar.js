@@ -1,11 +1,10 @@
 console.log("hello");
 //chrome.storage.local.clear();
-var amount = 1;
+var amount;
 var iframe;
 var changing_term = false;
-var changing_term_value;
 var opening_advanced=false;
-var changing_advanced_value;
+var current_value;
 
 class SearchBookmark {
     constructor(subjectId, subjectName, courseSelector, courseNumber, career, open, keyword, term, startSelector, startNumber, endSelector, endNumber, days, mon, tues, wed, thurs, fri,sat,sun, instructNameSelector, instructName, classNbr, campus, courseComp, session) {
@@ -124,12 +123,12 @@ function oniFrameChange() {
             console.log('reload because of clear');
             //if it was changing the term because of a bookmark load
             if (changing_term) {
-                loadButtonAfter(changing_term_value);
+                loadButtonAfter();
                 changing_term=false
             }
             //if it was opening the advanced page because a bookmark load contains advanced search info
             else if(opening_advanced){
-                loadButtonAfter(opening_advanced_value)
+                loadButtonAfter()
                 opening_advanced=false;
             }
 
@@ -170,66 +169,68 @@ function saveButton() {
     amount = amount + 1;
 }
 function loadButton(){
-    loadButtonAfter(iframe.contentWindow.document.getElementById("bookmarks").options[iframe.contentWindow.document.getElementById("bookmarks").selectedIndex].value);
-}
-
-function loadButtonAfter(ind) {
-    var value;
+    const ind =iframe.contentWindow.document.getElementById("bookmarks").options[iframe.contentWindow.document.getElementById("bookmarks").selectedIndex].value;
     chrome.storage.local.get(ind, function (result) {
         console.log("loading ")
         console.log(result)
-        value=result[ind];
+        current_value=result[ind];
+        loadButtonAfter();
+    })
+    }
 
-        if (iframe.contentWindow.document.getElementById("CLASS_SRCH_WRK2_STRM$35$").selectedIndex != value.term) {
-            iframe.contentWindow.document.getElementById("CLASS_SRCH_WRK2_STRM$35$").selectedIndex = value.term;
+function loadButtonAfter(ind) {
+   
+
+        if (iframe.contentWindow.document.getElementById("CLASS_SRCH_WRK2_STRM$35$").selectedIndex != current_value.term) {
+            iframe.contentWindow.document.getElementById("CLASS_SRCH_WRK2_STRM$35$").selectedIndex = current_value.term;
             var event = new Event('change');
             iframe.contentWindow.document.getElementById("CLASS_SRCH_WRK2_STRM$35$").dispatchEvent(event);
             changing_term = true;
             
-            changing_term_value = ind;
+            
     
         }
         else {
             //needs to expand advance pane
-            if(value.advancedSearch&&!iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_START_TIME_OPR$5")){
+            if(current_value.advancedSearch&&!iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_START_TIME_OPR$5")){
                 
                 
                 iframe.contentWindow.document.getElementById("DERIVED_CLSRCH_SSR_EXPAND_COLLAPS$149$$1").click();
                 opening_advanced=true;
-                opening_advanced_value=ind;
+                
                 
             }
             //needs advanced pane but its already expanded
-            else if(value.advancedSearch&&iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_START_TIME_OPR$5")){
+            else if(current_value.advancedSearch&&iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_START_TIME_OPR$5")){
                 console.log("advanced pane already open");
-                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_START_TIME_OPR$5").selectedIndex=value.startSelector;
-                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_MEETING_TIME_START$5").value=value.startNumber;
-                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_END_TIME_OPR$5").selectedIndex=value.endSelector;
-                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_MEETING_TIME_END$5").value=value.endNumber;
-                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_INCLUDE_CLASS_DAYS$6").selectedIndex=value.days;
-                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_MON$6").checked=value.mon;
-                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_TUES$6").checked=value.tues;
-                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_WED$6").checked=value.wed;
-                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_THURS$6").checked=value.thurs;
-                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_FRI$6").checked=value.fri;
-                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SAT$6").checked=value.sat;
-                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SUN$6").checked=value.sun
-                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_EXACT_MATCH2$7").selectedIndex=value.instructNameSelector;
-                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_LAST_NAME$7").value=value.instructName;
-                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_CLASS_NBR$8").value=value.classNbr;
-                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_CAMPUS$9").selectedIndex=value.campus;
-                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_COMPONENT$10").selectedIndex=value.courseComp;
-                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SESSION_CODE$11").selectedIndex=value.session;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_START_TIME_OPR$5").selectedIndex=current_value.startSelector;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_MEETING_TIME_START$5").value=current_value.startNumber;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_END_TIME_OPR$5").selectedIndex=current_value.endSelector;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_MEETING_TIME_END$5").value=current_value.endNumber;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_INCLUDE_CLASS_DAYS$6").selectedIndex=current_value.days;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_MON$6").checked=current_value.mon;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_TUES$6").checked=current_value.tues;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_WED$6").checked=current_value.wed;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_THURS$6").checked=current_value.thurs;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_FRI$6").checked=current_value.fri;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SAT$6").checked=current_value.sat;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SUN$6").checked=current_value.sun
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_EXACT_MATCH2$7").selectedIndex=current_value.instructNameSelector;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_LAST_NAME$7").value=current_value.instructName;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_CLASS_NBR$8").value=current_value.classNbr;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_CAMPUS$9").selectedIndex=current_value.campus;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_COMPONENT$10").selectedIndex=current_value.courseComp;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SESSION_CODE$11").selectedIndex=current_value.session;
                 
             }
-            iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SUBJECT_SRCH$0").selectedIndex = value.subjectId;
-            iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_EXACT_MATCH1$1").selectedIndex = value.courseSelector;
-            iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_CATALOG_NBR$1").value = value.courseNumber;
-            iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_ACAD_CAREER$2").selectedIndex = value.career;
-            iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_OPEN_ONLY$3").checked = value.open;
-            iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_DESCR$4").value = value.keyword;
+            iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SUBJECT_SRCH$0").selectedIndex = current_value.subjectId;
+            iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_EXACT_MATCH1$1").selectedIndex = current_value.courseSelector;
+            iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_CATALOG_NBR$1").value = current_value.courseNumber;
+            iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_ACAD_CAREER$2").selectedIndex = current_value.career;
+            iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_OPEN_ONLY$3").checked = current_value.open;
+            iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_DESCR$4").value =current_value.keyword;
         }
-    })
+    
     
 }
 function removeButton() {
@@ -244,7 +245,9 @@ function onItemChanged() {
     console.log("changed");
 
     chrome.storage.local.get(null, function (result) {
-        //console.log(result);
+        console.log(result);
+        
+        
         var index = 1;
         iframe.contentWindow.document.getElementById("bookmarks").innerHTML = ``;
         for (const [key, value] of Object.entries(result)) {
@@ -276,6 +279,7 @@ function onItemChanged() {
             index = index + 1;
 
         };
+        amount=index;
     });
 }
 
