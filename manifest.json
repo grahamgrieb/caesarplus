@@ -1,12 +1,11 @@
 {
     "name": "Caesar+",
     "description": "Make Caesar class search better",
-    "version": "1.0",
+    "version": "1.2",
     "manifest_version": 2,
     "permissions": [
         "storage"
       ],
-     
     "content_scripts": [
         {
           "matches": ["*://*.caesar.ent.northwestern.edu/*PT_AGSTARTPAGE_NUI*"],
