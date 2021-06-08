@@ -68,10 +68,10 @@ function onFrameLoaded() {
         //<input type="button" id="load_button" tabindex="995" value="Load" class="PSPUSHBUTTON" style="width:50px;" data-termchanged="0" onclick="while(this.dataset.termchanged!="1"); addchg_win0(this); submitAction_win0(this.form,this.id); this.dataset.termchanged="2";>
         console.log("search page");
         //adds buttons and selector
-        iframe.contentWindow.document.getElementById("ACE_DERIVED_CLSRCH_GROUP4").outerHTML = `<label class="PSDROPDOWNLABEL">Bookmarks </label><input type="button" id="save_button" tabindex="995" value="Save" class="PSPUSHBUTTON" style="width:50px;"> 
+        iframe.contentWindow.document.getElementById("win0div$ICField143").outerHTML = `</br><div style="width:600px;"><div style="display: flex; justify-content: center;"><label class="PSDROPDOWNLABEL">Bookmarks </label><input type="button" id="save_button" tabindex="995" value="Save" class="PSPUSHBUTTON" style="width:50px;"> 
                                                                                     <input type="button" id="load_button" tabindex="995" value="Load" class="PSPUSHBUTTON" style="width:50px;">
                                                                                         <select class="PSDROPDOWNLIST" id="bookmarks" style="width:220px; "></select>
-                                                                                        <input type="button" id="remove_button" tabindex="995" value="Delete" class="PSPUSHBUTTON" style="width:50px;">`+iframe.contentWindow.document.getElementById("ACE_DERIVED_CLSRCH_GROUP4").outerHTML;
+                                                                                        <input type="button" id="remove_button" tabindex="995" value="Delete" class="PSPUSHBUTTON" style="width:50px;"></div></div>`;
 
         iframe.contentWindow.document.getElementById("save_button").onclick = saveButton;
         iframe.contentWindow.document.getElementById("load_button").addEventListener("click", loadButton);
@@ -315,7 +315,11 @@ function newTab(ind) {
 
         console.log(newTab);
         newTab.getElementById("win0divPSPAGECONTAINER").outerHTML = event.target.responseXML.getElementById("win0divPAGECONTAINER").innerHTML.slice(9, -3)
-
+        newTab.getElementById("ACE_$ICField241").outerHTML="";
+        newTab.getElementById("win0divNW_DERIVED_SS_NW_LINK_CRSE_DESCR").parentElement.parentElement.outerHTML="";
+        newTab.getElementById("NW_DERIVED_SS_NW_LINK_INST_CTEC$0").outerHTML="";
+        newTab.getElementById("DERIVED_REGFRM1_TITLE1").innerText+="- ALL LINKS HAVE BEEN REMOVED";
+        newTab.title=`${newTab.getElementById("DERIVED_CLSRCH_DESCR200").innerText}`;
         var wnd = window.open("");
         wnd.document.write(newTab.documentElement.outerHTML);
 
