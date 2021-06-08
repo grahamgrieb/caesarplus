@@ -4,6 +4,49 @@ var amount = 1;
 var iframe;
 var changing_term = false;
 var changing_term_value;
+var opening_advanced=false;
+var changing_advanced_value;
+
+class SearchBookmark {
+    constructor(subjectId, subjectName, courseSelector, courseNumber, career, open, keyword, term, startSelector, startNumber, endSelector, endNumber, days, mon, tues, wed, thurs, fri,sat,sun, instructNameSelector, instructName, classNbr, campus, courseComp, session) {
+        console.log("leng of args "+arguments.length)
+        this.subjectId = subjectId;
+        this.subjectName = subjectName;
+        this.courseSelector = courseSelector;
+        this.courseNumber = courseNumber;
+        this.career = career;
+        this.open = open;
+        this.keyword = keyword;
+        this.term = term;
+        this.advancedSearch = true;
+        if (arguments.length > 8) {
+            this.advancedSearch = true;
+            this.startSelector = startSelector;
+            this.startNumber = startNumber;
+            this.endSelector = endSelector;
+            this.endNumber = endNumber;
+            this.days = days;
+            this.mon = mon;
+            this.tues = tues;
+            this.wed = wed;
+            this.thurs = thurs;
+            this.fri = fri;
+            this.sat=sat;
+            this.sun=sun;
+            this.instructName = instructName;
+            this.instructNameSelector = instructNameSelector;
+            this.classNbr = classNbr;
+            this.campus = campus
+            this.courseComp = courseComp;
+            this.session = session;
+        }
+        else {
+            this.advancedSearch = false;
+        }
+
+
+    }
+}
 
 //setting up initial listener that sees when the iframe parent is changed
 const iframe_parent = document.getElementById("win0divPSPAGECONTAINER_MD");
@@ -25,11 +68,10 @@ function onFrameLoaded() {
         //<input type="button" id="load_button" tabindex="995" value="Load" class="PSPUSHBUTTON" style="width:50px;" data-termchanged="0" onclick="while(this.dataset.termchanged!="1"); addchg_win0(this); submitAction_win0(this.form,this.id); this.dataset.termchanged="2";>
         console.log("search page");
         //adds buttons and selector
-        iframe.contentWindow.document.getElementById("win0div$ICField232$0").innerHTML += `</br><div style="width:600px;"><div style="display: flex; justify-content: center;"><input type="button" id="save_button" tabindex="995" value="Save" class="PSPUSHBUTTON" style="width:50px;"> 
-                                                                                    <input type="button" id="load_button" tabindex="995" value="Load" class="PSPUSHBUTTON" style="width:50px;" data-termchanged="0">
-                                                                                        
+        iframe.contentWindow.document.getElementById("ACE_DERIVED_CLSRCH_GROUP4").outerHTML = `<label class="PSDROPDOWNLABEL">Bookmarks </label><input type="button" id="save_button" tabindex="995" value="Save" class="PSPUSHBUTTON" style="width:50px;"> 
+                                                                                    <input type="button" id="load_button" tabindex="995" value="Load" class="PSPUSHBUTTON" style="width:50px;">
                                                                                         <select class="PSDROPDOWNLIST" id="bookmarks" style="width:220px; "></select>
-                                                                                        <input type="button" id="remove_button" tabindex="995" value="❌" class="PSPUSHBUTTON" style="width:25px;"></div></div>`;
+                                                                                        <input type="button" id="remove_button" tabindex="995" value="Delete" class="PSPUSHBUTTON" style="width:50px;">`+iframe.contentWindow.document.getElementById("ACE_DERIVED_CLSRCH_GROUP4").outerHTML;
 
         iframe.contentWindow.document.getElementById("save_button").onclick = saveButton;
         iframe.contentWindow.document.getElementById("load_button").addEventListener("click", loadButton);
@@ -82,12 +124,13 @@ function oniFrameChange() {
             console.log('reload because of clear');
             //if it was changing the term because of a bookmark load
             if (changing_term) {
-                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SUBJECT_SRCH$0").selectedIndex = changing_term_value[0];
-                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_EXACT_MATCH1$1").selectedIndex = parseInt(changing_term_value[1], 10);
-                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_CATALOG_NBR$1").value = changing_term_value[2], 10;
-                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_ACAD_CAREER$2").selectedIndex = changing_term_value[3];
-                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_OPEN_ONLY$3").checked = changing_term_value[4];
-                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_DESCR$4").value = changing_term_value[5];
+                loadButtonAfter(changing_term_value);
+                changing_term=false
+            }
+            //if it was opening the advanced page because a bookmark load contains advanced search info
+            else if(opening_advanced){
+                loadButtonAfter(opening_advanced_value)
+                opening_advanced=false;
             }
 
         }
@@ -108,61 +151,90 @@ function saveButton() {
 
 
     console.log('amount' + amount);
-
-
+    var bookmark;
+    if (iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_START_TIME_OPR$5")) {
+        console.log("advanced");
+        bookmark = new SearchBookmark(iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SUBJECT_SRCH$0").selectedIndex, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SUBJECT_SRCH$0").options[iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SUBJECT_SRCH$0").selectedIndex].text, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_EXACT_MATCH1$1").selectedIndex, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_CATALOG_NBR$1").value, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_ACAD_CAREER$2").selectedIndex, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_OPEN_ONLY$3").checked, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_DESCR$4").value, iframe.contentWindow.document.getElementById("CLASS_SRCH_WRK2_STRM$35$").selectedIndex, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_START_TIME_OPR$5").selectedIndex, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_MEETING_TIME_START$5").value, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_END_TIME_OPR$5").selectedIndex, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_MEETING_TIME_END$5").value, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_INCLUDE_CLASS_DAYS$6").selectedIndex, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_MON$6").checked, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_TUES$6").checked, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_WED$6").checked, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_THURS$6").checked, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_FRI$6").checked, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SAT$6").checked, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SUN$6").checked, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_EXACT_MATCH2$7").selectedIndex, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_LAST_NAME$7").value, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_CLASS_NBR$8").value, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_CAMPUS$9").selectedIndex, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_COMPONENT$10").selectedIndex, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SESSION_CODE$11").selectedIndex)
+    }
+    else {
+        bookmark = new SearchBookmark(iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SUBJECT_SRCH$0").selectedIndex, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SUBJECT_SRCH$0").options[iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SUBJECT_SRCH$0").selectedIndex].text, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_EXACT_MATCH1$1").selectedIndex, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_CATALOG_NBR$1").value, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_ACAD_CAREER$2").selectedIndex, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_OPEN_ONLY$3").checked, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_DESCR$4").value, iframe.contentWindow.document.getElementById("CLASS_SRCH_WRK2_STRM$35$").selectedIndex)
+    }
     chrome.storage.local.set({
-        [amount]: [iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SUBJECT_SRCH$0").selectedIndex,
-        iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_EXACT_MATCH1$1").selectedIndex,
-        iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_CATALOG_NBR$1").value,
-        iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_ACAD_CAREER$2").selectedIndex,
-        iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_OPEN_ONLY$3").checked,
-        iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_DESCR$4").value,
-        iframe.contentWindow.document.getElementById("CLASS_SRCH_WRK2_STRM$35$").selectedIndex,
-        iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SUBJECT_SRCH$0").options[iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SUBJECT_SRCH$0").selectedIndex].text
-        ]
+        [amount]: bookmark
     },
         function (result) {
-            //console.log('set is '+result);
+            console.log("bookmark ");
+            console.log(bookmark);
 
         });
     amount = amount + 1;
 }
+function loadButton(){
+    loadButtonAfter(iframe.contentWindow.document.getElementById("bookmarks").options[iframe.contentWindow.document.getElementById("bookmarks").selectedIndex].value);
+}
 
-function loadButton() {
+function loadButtonAfter(ind) {
+    var value;
+    chrome.storage.local.get(ind, function (result) {
+        console.log("loading ")
+        console.log(result)
+        value=result[ind];
 
-
-    const value = iframe.contentWindow.document.getElementById("bookmarks").options[iframe.contentWindow.document.getElementById("bookmarks").selectedIndex].value.split(',');
-    console.log("loading ")
-    console.log(value)
-    if (iframe.contentWindow.document.getElementById("CLASS_SRCH_WRK2_STRM$35$").selectedIndex != value[6]) {
-        iframe.contentWindow.document.getElementById("CLASS_SRCH_WRK2_STRM$35$").selectedIndex = value[6];
-        var event = new Event('change');
-        iframe.contentWindow.document.getElementById("CLASS_SRCH_WRK2_STRM$35$").dispatchEvent(event);
-        changing_term = true;
-        changing_term_value = value;
-        //while(iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SUBJECT_SRCH$0").selectedIndex!=0);
-    }
-    else {
-        iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SUBJECT_SRCH$0").selectedIndex = value[0];
-        iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_EXACT_MATCH1$1").selectedIndex = parseInt(value[1], 10);
-        iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_CATALOG_NBR$1").value = value[2], 10;
-        iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_ACAD_CAREER$2").selectedIndex = value[3];
-        iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_OPEN_ONLY$3").checked = value[4];
-        iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_DESCR$4").value = value[5];
-    }
-
-
-
-
-    // while (iframe.contentWindow.document.getElementById("WAIT_win0").style.visibility != "hidden");
-
-
-
-
+        if (iframe.contentWindow.document.getElementById("CLASS_SRCH_WRK2_STRM$35$").selectedIndex != value.term) {
+            iframe.contentWindow.document.getElementById("CLASS_SRCH_WRK2_STRM$35$").selectedIndex = value.term;
+            var event = new Event('change');
+            iframe.contentWindow.document.getElementById("CLASS_SRCH_WRK2_STRM$35$").dispatchEvent(event);
+            changing_term = true;
+            
+            changing_term_value = ind;
+    
+        }
+        else {
+            //needs to expand advance pane
+            if(value.advancedSearch&&!iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_START_TIME_OPR$5")){
+                
+                
+                iframe.contentWindow.document.getElementById("DERIVED_CLSRCH_SSR_EXPAND_COLLAPS$149$$1").click();
+                opening_advanced=true;
+                opening_advanced_value=ind;
+                
+            }
+            //needs advanced pane but its already expanded
+            else if(value.advancedSearch&&iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_START_TIME_OPR$5")){
+                console.log("advanced pane already open");
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_START_TIME_OPR$5").selectedIndex=value.startSelector;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_MEETING_TIME_START$5").value=value.startNumber;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_END_TIME_OPR$5").selectedIndex=value.endSelector;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_MEETING_TIME_END$5").value=value.endNumber;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_INCLUDE_CLASS_DAYS$6").selectedIndex=value.days;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_MON$6").checked=value.mon;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_TUES$6").checked=value.tues;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_WED$6").checked=value.wed;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_THURS$6").checked=value.thurs;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_FRI$6").checked=value.fri;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SAT$6").checked=value.sat;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SUN$6").checked=value.sun
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_EXACT_MATCH2$7").selectedIndex=value.instructNameSelector;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_LAST_NAME$7").value=value.instructName;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_CLASS_NBR$8").value=value.classNbr;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_CAMPUS$9").selectedIndex=value.campus;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_COMPONENT$10").selectedIndex=value.courseComp;
+                iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SESSION_CODE$11").selectedIndex=value.session;
+                
+            }
+            iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SUBJECT_SRCH$0").selectedIndex = value.subjectId;
+            iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_EXACT_MATCH1$1").selectedIndex = value.courseSelector;
+            iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_CATALOG_NBR$1").value = value.courseNumber;
+            iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_ACAD_CAREER$2").selectedIndex = value.career;
+            iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_OPEN_ONLY$3").checked = value.open;
+            iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_DESCR$4").value = value.keyword;
+        }
+    })
+    
 }
 function removeButton() {
 
-    const remove_ind = iframe.contentWindow.document.getElementById("bookmarks").options[iframe.contentWindow.document.getElementById("bookmarks").selectedIndex].value.split(',')[8];
+    const remove_ind = iframe.contentWindow.document.getElementById("bookmarks").options[iframe.contentWindow.document.getElementById("bookmarks").selectedIndex].value;
     console.log('remove ' + remove_ind);
     chrome.storage.local.remove(remove_ind);
 }
@@ -177,33 +249,30 @@ function onItemChanged() {
         iframe.contentWindow.document.getElementById("bookmarks").innerHTML = ``;
         for (const [key, value] of Object.entries(result)) {
 
-            const term = iframe.contentWindow.document.getElementById("CLASS_SRCH_WRK2_STRM$35$").options[value[6]].text.slice(2, 7);
-            //var subject = iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SUBJECT_SRCH$0").options[value[0]].text.match(/\b[A-Z\_]+(?:\s+[A-Z\_]+)*\b/);
-            var subject = value[7].match(/\b[A-Z\_]+(?:\s+[A-Z\_]+)*\b/);
+            const term = iframe.contentWindow.document.getElementById("CLASS_SRCH_WRK2_STRM$35$").options[value.term].text.slice(2, 7);
+            var subject = value.subjectName.match(/\b[A-Z\_]+(?:\s+[A-Z\_]+)*\b/);
             if (!subject) {
                 subject = "N/A";
             }
             var match;
-            if (value[1] == 1) {
+            if (value.courseSelector == 1) {
                 match = "contains";
             }
-            else if (value[1] == 2) {
+            else if (value.courseSelector == 2) {
                 match = ">=";
             }
-            else if (value[1] == 3) {
+            else if (value.courseSelector == 3) {
                 match = "=";
             }
-            else if (value[1] == 4) {
+            else if (value.courseSelector == 4) {
                 match = "<=";
             }
 
-            var number = value[2];
+            var number = value.courseNumber;
             if (number) {
                 match = match + " "
             }
-
-            value.push(key)
-            iframe.contentWindow.document.getElementById("bookmarks").innerHTML += `<option value="${value}">${subject} ${match}${number}, \'${term}</option>`;
+            iframe.contentWindow.document.getElementById("bookmarks").innerHTML += `<option value="${key}">${subject} ${match}${number}, \'${term}</option>`;
             index = index + 1;
 
         };
@@ -227,7 +296,7 @@ function resultsPage() {
                 moreInfo(ind);
             }
         })(ind);
-        iframe.contentWindow.document.getElementById(`DERIVED_CLSRCH_DESCRLONG$${ind}`).innerHTML+=`<div id="extra_info${ind}"></div>`;
+        iframe.contentWindow.document.getElementById(`DERIVED_CLSRCH_DESCRLONG$${ind}`).innerHTML += `<div id="extra_info${ind}"></div>`;
         ind++;
     })
     ind = 0;
@@ -276,26 +345,22 @@ function moreInfo(ind) {
         else {
             iframe.contentWindow.document.getElementById(`extra_info${ind}`).innerHTML += `<br>Class Capacity: ${newTab.getElementById("SSR_CLS_DTL_WRK_ENRL_TOT").innerText}/${newTab.getElementById("SSR_CLS_DTL_WRK_ENRL_CAP").innerText}<br><br>Wait List Total: ${newTab.getElementById("SSR_CLS_DTL_WRK_WAIT_TOT").innerText}`;
         }
-        iframe.contentWindow.document.getElementById(`morebutton${ind}`).value="Less Info";
-        iframe.contentWindow.document.getElementById(`morebutton${ind}`).onclick= (function (ind) {
+        iframe.contentWindow.document.getElementById(`morebutton${ind}`).value = "Less Info";
+        iframe.contentWindow.document.getElementById(`morebutton${ind}`).onclick = (function (ind) {
             return function () {
                 lessInfo(ind);
             }
         })(ind);
-        //var wnd = window.open("");
-        //wnd.document.write(newTab.documentElement.outerHTML);
-
-
 
     });
     xhr.withCredentials = "true";
     xhr.setRequestHeader('Content-Type', "application/x-www-form-urlencoded");
     xhr.send(fd);
 }
-function lessInfo(ind){
-    iframe.contentWindow.document.getElementById(`extra_info${ind}`).innerHTML="";
-    iframe.contentWindow.document.getElementById(`morebutton${ind}`).value="More Info";
-    iframe.contentWindow.document.getElementById(`morebutton${ind}`).onclick= (function (ind) {
+function lessInfo(ind) {
+    iframe.contentWindow.document.getElementById(`extra_info${ind}`).innerHTML = "";
+    iframe.contentWindow.document.getElementById(`morebutton${ind}`).value = "More Info";
+    iframe.contentWindow.document.getElementById(`morebutton${ind}`).onclick = (function (ind) {
         return function () {
             moreInfo(ind);
         }
