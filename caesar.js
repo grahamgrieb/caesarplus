@@ -385,7 +385,7 @@ function newTab(ind) {
     //console.log(ind);
     var xhr = new XMLHttpRequest();
 
-    var fd = `ICAJAX=1&ICNAVTYPEDROPDOWN=0&ICType=Panel&ICElementNum=0&ICStateNum=${iframe.contentWindow.document.getElementById("ICStateNum").value.toString()}&ICAction=MTG_CLASSNAME%24${ind}&ICModelCancel=0&ICXPos=0&ICYPos=0&ResponsetoDiffFrame=-1&TargetFrameName=None&FacetPath=None&ICFocus=&ICSaveWarningFilter=0&ICChanged=-1&ICSkipPending=0&ICAutoSave=0&ICResubmit=0&ICSID=${iframe.contentWindow.document.getElementById("ICSID").value.toString()}&ICAGTarget=true&ICActionPrompt=false&ICBcDomData=UnknownValue&ICPanelHelpUrl=&ICPanelName=&ICFind=&ICAddCount=&ICAppClsData=&DERIVED_SSTSNAV_SSTS_MAIN_GOTO$27$=9999`;
+    var fd = `ICAJAX=1&ICNAVTYPEDROPDOWN=0&ICType=Panel&ICElementNum=0&ICStateNum=${iframe.contentWindow.document.getElementById("ICStateNum").value.toString()}&ICAction=MTG_CLASSNAME%24${ind}&ICModelCancel=0&ICXPos=0&ICYPos=0&ResponsetoDiffFrame=-1&TargetFrameName=None&FacetPath=None&ICFocus=&ICSaveWarningFilter=0&ICChanged=-1&ICSkipPending=0&ICAutoSave=0&ICResubmit=0&ICSID=${encodeURIComponent(iframe.contentWindow.document.getElementById("ICSID").value)}&ICAGTarget=true&ICActionPrompt=false&ICBcDomData=UnknownValue&ICPanelHelpUrl=&ICPanelName=&ICFind=&ICAddCount=&ICAppClsData=&DERIVED_SSTSNAV_SSTS_MAIN_GOTO$27$=9999`;
     
     xhr.open("POST", `${window.location.toString().substr(0,window.location.toString().indexOf("/c/")+3)}SA_LEARNER_SERVICES.CLASS_SEARCH.GBL`, true);
    // xhr.open("POST", `https://caesar.ent.northwestern.edu/psc/CS857PRD/EMPLOYEE/SA/c/SA_LEARNER_SERVICES.CLASS_SEARCH.GBL`, true);
@@ -408,14 +408,14 @@ function newTab(ind) {
     });
     xhr.withCredentials = "true";
     xhr.setRequestHeader('Content-Type', "application/x-www-form-urlencoded");
-    xhr.send(encodeURIComponent(fd));
+    xhr.send(fd);
 }
 function moreInfo(ind) {
     //console.log("more info")
     //console.log(ind);
     var xhr = new XMLHttpRequest();
 
-    var fd = `ICAJAX=1&ICNAVTYPEDROPDOWN=0&ICType=Panel&ICElementNum=0&ICStateNum=${iframe.contentWindow.document.getElementById("ICStateNum").value}&ICAction=MTG_CLASSNAME%24${ind}&ICModelCancel=0&ICXPos=0&ICYPos=0&ResponsetoDiffFrame=-1&TargetFrameName=None&FacetPath=None&ICFocus=&ICSaveWarningFilter=0&ICChanged=-1&ICSkipPending=0&ICAutoSave=0&ICResubmit=0&ICSID=${iframe.contentWindow.document.getElementById("ICSID").value}&ICAGTarget=true&ICActionPrompt=false&ICBcDomData=UnknownValue&ICPanelHelpUrl=&ICPanelName=&ICFind=&ICAddCount=&ICAppClsData=&DERIVED_SSTSNAV_SSTS_MAIN_GOTO$27$=9999`;
+    var fd = `ICAJAX=1&ICNAVTYPEDROPDOWN=0&ICType=Panel&ICElementNum=0&ICStateNum=${iframe.contentWindow.document.getElementById("ICStateNum").value}&ICAction=MTG_CLASSNAME%24${ind}&ICModelCancel=0&ICXPos=0&ICYPos=0&ResponsetoDiffFrame=-1&TargetFrameName=None&FacetPath=None&ICFocus=&ICSaveWarningFilter=0&ICChanged=-1&ICSkipPending=0&ICAutoSave=0&ICResubmit=0&ICSID=${encodeURIComponent(iframe.contentWindow.document.getElementById("ICSID").value)}&ICAGTarget=true&ICActionPrompt=false&ICBcDomData=UnknownValue&ICPanelHelpUrl=&ICPanelName=&ICFind=&ICAddCount=&ICAppClsData=&DERIVED_SSTSNAV_SSTS_MAIN_GOTO$27$=9999`;
 
     xhr.open("POST", `${window.location.toString().substr(0,window.location.toString().indexOf("/c/")+3)}SA_LEARNER_SERVICES.CLASS_SEARCH.GBL`, true);
     xhr.addEventListener('load', function (event) {
