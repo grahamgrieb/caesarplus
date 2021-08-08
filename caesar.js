@@ -72,17 +72,18 @@ const observer = new MutationObserver(onParentLoaded);
 observer.observe(iframe_parent, observerOptions);
 
 function onFrameLoaded() {
-    ////console.log('iframe loaded');
+    //console.log('iframe loaded');
     iframe = document.getElementById("main_target_win0");
     //checking if the iframe contain an element with "CLASS_SEARCH", this tells us if were on the class search page(and not for example on a the shopping cart page)
     const frameobserver = new MutationObserver(oniFrameChange);
     if (iframe.contentWindow.document.getElementById("pt_pageinfo_win0").getAttribute('page') == "SSR_CLSRCH_ENTRY") {
        //console.log("search page");
         //adds buttons and selector
-        iframe.contentWindow.document.getElementById("win0div$ICField143").outerHTML = `</br><div style="width:600px;"><div style="display: flex; justify-content: center;"><label class="PSDROPDOWNLABEL">Bookmarks </label><input type="button" id="save_button" tabindex="995" value="Save" class="PSPUSHBUTTON" style="width:50px;"> 
-                                                                                    <input type="button" id="load_button" tabindex="995" value="Load" class="PSPUSHBUTTON" style="width:50px;">
+        iframe.contentWindow.document.getElementById("win0div$ICField143").outerHTML = `</br><div style="width:600px;"><div style="display: flex; justify-content: center;"><label class="PSDROPDOWNLABEL">Bookmarks </label>
+                                                                                    <a role="presentation" class="PSPUSHBUTTON Left"><span style="background-Color: transparent;"><input type="button" id="save_button" tabindex="995" value="Save" class="PSPUSHBUTTON" style="width:50px;"> </span></a>
+                                                                                    <a role="presentation" class="PSPUSHBUTTON Left"><span style="background-Color: transparent;"><input type="button" id="load_button" tabindex="995" value="Load" class="PSPUSHBUTTON" style="width:50px;"></span></a>
                                                                                         <select class="PSDROPDOWNLIST" id="bookmarks" style="width:220px; "></select>
-                                                                                        <input type="button" id="remove_button" tabindex="995" value="Delete" class="PSPUSHBUTTON" style="width:50px;"></div></div>`;
+                                                                                        <a role="presentation" class="PSPUSHBUTTON Left"><span style="background-Color: transparent;"><input type="button" id="remove_button" tabindex="995" value="Delete" class="PSPUSHBUTTON" style="width:50px;"></span></a></div></div>`;
 
         iframe.contentWindow.document.getElementById("save_button").onclick = saveButton;
         iframe.contentWindow.document.getElementById("load_button").addEventListener("click", loadButton);
@@ -141,17 +142,17 @@ function oniFrameChange() {
             }
             //if it was opening the advanced page because a bookmark load contains advanced search info
             else if(opening_advanced){
-               // console.log('opening_advanced');
+               //console.log('opening_advanced');
                 loadButtonAfter()
                 opening_advanced=false;
             }
             else if(opening_attributes){
-               // console.log('opening_attributes');
+               //console.log('opening_attributes');
                 loadButtonAfter()
                 opening_attributes=false;
             }
             else if (changing_attribute) {
-               // console.log('changing_attributes');
+               //console.log('changing_attributes');
                 loadButtonAfter();
                 changing_attribute=false;
             }
@@ -166,8 +167,8 @@ function oniFrameChange() {
         }
     }
     //if on results page
-    else if (iframe.contentWindow.document.getElementById("pt_pageinfo_win0").getAttribute('page') == "SSR_CLSRCH_RSLT" && iframe.contentWindow.document.getElementById("WAIT_win0").style.visibility == "hidden") {
-        if (!iframe.contentWindow.document.getElementById("tabbutton1")) {
+    else if (iframe.contentWindow.document.getElementById("pt_pageinfo_win0").getAttribute('page') == "SSR_CLSRCH_RSLT" && iframe.contentWindow.document.getElementById("WAIT_win0").style.visibility == "hidden"  ){
+        if (!iframe.contentWindow.document.getElementById("tabbutton0")) {
             //console.log("results page")
 
             resultsPage()
@@ -296,7 +297,8 @@ function loadButtonAfter(ind) {
             iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_ACAD_CAREER$2").selectedIndex = current_value.career;
             iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_OPEN_ONLY$3").checked = current_value.open;
             iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_DESCR$4").value =current_value.keyword;
-            onFrameLoaded();
+            if(current_value.advancedSearch||current_value.attriSearch||changing_term){
+                onFrameLoaded();}
         }
     
     
@@ -355,9 +357,12 @@ function onItemChanged() {
 function resultsPage() {
     //iframe.contentWindow.document.getElementById("win0divDERIVED_CLSRCH_GROUP5").innerHTML += `<a id="tab_button"  style="width:50px;" ptlinktgt="pt_peoplecode" " class="PSHYPERLINK">Load</a>`
     //iframe.contentWindow.document.getElementById("tab_button").onclick = function () { newTab(0) };
+    
     var ind = 0;
-    iframe.contentWindow.document.querySelectorAll('*[id^="ACE_SSR_CLSRSLT_WRK_GROUPBOX2$"]').forEach(elem => {
-        elem.outerHTML += `<input type="button" id="morebutton${ind}" tabindex="995" value="More Info" class="PSPUSHBUTTON" style="width:60px;"></input>    <input type="button" id="tabbutton${ind}" tabindex="995" value="Open in New Tab" class="PSPUSHBUTTON" style="width:100px;"></input>`;
+    iframe.contentWindow.document.querySelectorAll('*[id^="ACE_SSR_CLSRSLT_WRK_GROUPBOX3$"]').forEach(elem => {
+        iframe.contentWindow.document.getElementById(`DERIVED_CLSRCH_DESCRLONG$${ind}`).innerHTML += `<div id="extra_info${ind}"></div>`;
+        elem.outerHTML += `<a id="morebutton${ind}" tabindex="995"  style="width:60px; margin-right:13px;" class="PSHYPERLINK">More Info</a><a id="tabbutton${ind}" tabindex="995"  style="width:100px;" class="PSHYPERLINK">Open in New Tab</a>`;
+        //elem.outerHTML += `<a role="presentation" class="PSPUSHBUTTON Left"><span style="background-Color: transparent;"><input type="button" id="morebutton${ind}" tabindex="995" value="More Info" class="PSPUSHBUTTON" style="width:60px;"></input></span></a>    <a role="presentation" class="PSPUSHBUTTON Left"><span style="background-Color: transparent;"><input type="button" id="tabbutton${ind}" tabindex="995" value="Open in New Tab" class="PSPUSHBUTTON" style="width:100px;"></input></span></a>`;
         iframe.contentWindow.document.getElementById(`tabbutton${ind}`).onclick = (function (ind) {
             return function () {
                 newTab(ind);
@@ -368,19 +373,22 @@ function resultsPage() {
                 moreInfo(ind);
             }
         })(ind);
-        iframe.contentWindow.document.getElementById(`DERIVED_CLSRCH_DESCRLONG$${ind}`).innerHTML += `<div id="extra_info${ind}"></div>`;
+        
         ind++;
     })
+    
     ind = 0;
 
 }
 function newTab(ind) {
+    //console.log("newtab button")
     //console.log(ind);
     var xhr = new XMLHttpRequest();
 
-    var fd = `ICAJAX=1&ICNAVTYPEDROPDOWN=0&ICType=Panel&ICElementNum=0&ICStateNum=${iframe.contentWindow.document.getElementById("ICStateNum").value}&ICAction=MTG_CLASSNAME%24${ind}&ICModelCancel=0&ICXPos=0&ICYPos=0&ResponsetoDiffFrame=-1&TargetFrameName=None&FacetPath=None&ICFocus=&ICSaveWarningFilter=0&ICChanged=-1&ICSkipPending=0&ICAutoSave=0&ICResubmit=0&ICSID=${iframe.contentWindow.document.getElementById("ICSID").value}&ICAGTarget=true&ICActionPrompt=false&ICBcDomData=UnknownValue&ICPanelHelpUrl=&ICPanelName=&ICFind=&ICAddCount=&ICAppClsData=&DERIVED_SSTSNAV_SSTS_MAIN_GOTO$27$=9999`;
-
-    xhr.open("POST", "https://caesar.ent.northwestern.edu/psc/CS857PRD/EMPLOYEE/SA/c/SA_LEARNER_SERVICES.CLASS_SEARCH.GBL", true);
+    var fd = `ICAJAX=1&ICNAVTYPEDROPDOWN=0&ICType=Panel&ICElementNum=0&ICStateNum=${iframe.contentWindow.document.getElementById("ICStateNum").value.toString()}&ICAction=MTG_CLASSNAME%24${ind}&ICModelCancel=0&ICXPos=0&ICYPos=0&ResponsetoDiffFrame=-1&TargetFrameName=None&FacetPath=None&ICFocus=&ICSaveWarningFilter=0&ICChanged=-1&ICSkipPending=0&ICAutoSave=0&ICResubmit=0&ICSID=${iframe.contentWindow.document.getElementById("ICSID").value.toString()}&ICAGTarget=true&ICActionPrompt=false&ICBcDomData=UnknownValue&ICPanelHelpUrl=&ICPanelName=&ICFind=&ICAddCount=&ICAppClsData=&DERIVED_SSTSNAV_SSTS_MAIN_GOTO$27$=9999`;
+    
+    xhr.open("POST", `${window.location.toString().substr(0,window.location.toString().indexOf("/c/")+3)}SA_LEARNER_SERVICES.CLASS_SEARCH.GBL`, true);
+   // xhr.open("POST", `https://caesar.ent.northwestern.edu/psc/CS857PRD/EMPLOYEE/SA/c/SA_LEARNER_SERVICES.CLASS_SEARCH.GBL`, true);
     xhr.addEventListener('load', function (event) {
 
         const newTab = iframe.contentWindow.document.cloneNode(true);
@@ -403,12 +411,13 @@ function newTab(ind) {
     xhr.send(fd);
 }
 function moreInfo(ind) {
+    //console.log("more info")
     //console.log(ind);
     var xhr = new XMLHttpRequest();
 
     var fd = `ICAJAX=1&ICNAVTYPEDROPDOWN=0&ICType=Panel&ICElementNum=0&ICStateNum=${iframe.contentWindow.document.getElementById("ICStateNum").value}&ICAction=MTG_CLASSNAME%24${ind}&ICModelCancel=0&ICXPos=0&ICYPos=0&ResponsetoDiffFrame=-1&TargetFrameName=None&FacetPath=None&ICFocus=&ICSaveWarningFilter=0&ICChanged=-1&ICSkipPending=0&ICAutoSave=0&ICResubmit=0&ICSID=${iframe.contentWindow.document.getElementById("ICSID").value}&ICAGTarget=true&ICActionPrompt=false&ICBcDomData=UnknownValue&ICPanelHelpUrl=&ICPanelName=&ICFind=&ICAddCount=&ICAppClsData=&DERIVED_SSTSNAV_SSTS_MAIN_GOTO$27$=9999`;
 
-    xhr.open("POST", "https://caesar.ent.northwestern.edu/psc/CS857PRD/EMPLOYEE/SA/c/SA_LEARNER_SERVICES.CLASS_SEARCH.GBL", true);
+    xhr.open("POST", `${window.location.toString().substr(0,window.location.toString().indexOf("/c/")+3)}SA_LEARNER_SERVICES.CLASS_SEARCH.GBL`, true);
     xhr.addEventListener('load', function (event) {
 
         const newTab = iframe.contentWindow.document.cloneNode(true);
@@ -421,7 +430,7 @@ function moreInfo(ind) {
         else {
             iframe.contentWindow.document.getElementById(`extra_info${ind}`).innerHTML += `<br>Class Capacity: ${newTab.getElementById("SSR_CLS_DTL_WRK_ENRL_TOT").innerText}/${newTab.getElementById("SSR_CLS_DTL_WRK_ENRL_CAP").innerText}<br><br>Wait List Total: ${newTab.getElementById("SSR_CLS_DTL_WRK_WAIT_TOT").innerText}`;
         }
-        iframe.contentWindow.document.getElementById(`morebutton${ind}`).value = "Less Info";
+        iframe.contentWindow.document.getElementById(`morebutton${ind}`).innerText = "Less Info";
         iframe.contentWindow.document.getElementById(`morebutton${ind}`).onclick = (function (ind) {
             return function () {
                 lessInfo(ind);
@@ -435,7 +444,7 @@ function moreInfo(ind) {
 }
 function lessInfo(ind) {
     iframe.contentWindow.document.getElementById(`extra_info${ind}`).innerHTML = "";
-    iframe.contentWindow.document.getElementById(`morebutton${ind}`).value = "More Info";
+    iframe.contentWindow.document.getElementById(`morebutton${ind}`).innerText = "More Info";
     iframe.contentWindow.document.getElementById(`morebutton${ind}`).onclick = (function (ind) {
         return function () {
             moreInfo(ind);
