@@ -142,17 +142,17 @@ function oniFrameChange() {
             }
             //if it was opening the advanced page because a bookmark load contains advanced search info
             else if(opening_advanced){
-               //console.log('opening_advanced');
+                //console.log('opening_advanced');
                 loadButtonAfter()
                 opening_advanced=false;
             }
             else if(opening_attributes){
-               //console.log('opening_attributes');
+                //console.log('opening_attributes');
                 loadButtonAfter()
                 opening_attributes=false;
             }
             else if (changing_attribute) {
-               //console.log('changing_attributes');
+                //console.log('changing_attributes');
                 loadButtonAfter();
                 changing_attribute=false;
             }
@@ -214,7 +214,7 @@ function saveButton() {
 function loadButton(){
     const ind =iframe.contentWindow.document.getElementById("bookmarks").options[iframe.contentWindow.document.getElementById("bookmarks").selectedIndex].value;
     chrome.storage.local.get(ind, function (result) {
-       // console.log("loading ")
+        //console.log("loading ")
         //console.log(result)
         current_value=result[ind];
         loadButtonAfter();
@@ -392,7 +392,7 @@ function newTab(ind) {
     xhr.addEventListener('load', function (event) {
 
         const newTab = iframe.contentWindow.document.cloneNode(true);
-
+        
         //console.log(newTab);
         newTab.getElementById("win0divPSPAGECONTAINER").outerHTML = event.target.responseXML.getElementById("win0divPAGECONTAINER").innerHTML.slice(9, -3)
         newTab.getElementById("ACE_$ICField241").outerHTML="";
@@ -403,12 +403,12 @@ function newTab(ind) {
         var wnd = window.open("");
         wnd.document.write(newTab.documentElement.outerHTML);
 
-
+        //console.log("loaded new tab")
 
     });
     xhr.withCredentials = "true";
     xhr.setRequestHeader('Content-Type', "application/x-www-form-urlencoded");
-    xhr.send(fd);
+    xhr.send(encodeURIComponent(fd));
 }
 function moreInfo(ind) {
     //console.log("more info")
@@ -436,6 +436,7 @@ function moreInfo(ind) {
                 lessInfo(ind);
             }
         })(ind);
+        //console.log("loaded more info")
 
     });
     xhr.withCredentials = "true";
