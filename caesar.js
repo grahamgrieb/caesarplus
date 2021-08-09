@@ -123,16 +123,12 @@ function oniFrameChange() {
     //if on search page
     if (iframe.contentWindow.document.getElementById("pt_pageinfo_win0").getAttribute('page') == "SSR_CLSRCH_ENTRY") {
         //console.log('iframe changed');
-        //this is for when the user does an invalid search
-        if (!iframe.contentWindow.document.getElementById("save_button") && iframe.contentWindow.document.getElementById("win0divDERIVED_CLSMSG_ERROR_TEXT") && iframe.contentWindow.document.getElementById("win0divDERIVED_CLSMSG_ERROR_TEXT").textContent && iframe.contentWindow.document.getElementById("WAIT_win0").style.visibility == "hidden") {
-            onFrameLoaded();
-            //console.log('reload because of search error');
-        }
+        
         //this is when the user clicks the clears button,pane is opened, or term is changed
-        else if (!iframe.contentWindow.document.getElementById("save_button") &&
-            (!iframe.contentWindow.document.getElementById("win0divDERIVED_CLSMSG_ERROR_TEXT") || (iframe.contentWindow.document.getElementById("win0divDERIVED_CLSMSG_ERROR_TEXT") && !iframe.contentWindow.document.getElementById("win0divDERIVED_CLSMSG_ERROR_TEXT").textContent))
+        if (!iframe.contentWindow.document.getElementById("save_button") &&
+            ((!iframe.contentWindow.document.getElementById("win0divDERIVED_CLSMSG_ERROR_TEXT") || (iframe.contentWindow.document.getElementById("win0divDERIVED_CLSMSG_ERROR_TEXT") && !iframe.contentWindow.document.getElementById("win0divDERIVED_CLSMSG_ERROR_TEXT").textContent))||changing_term)
             && iframe.contentWindow.document.getElementById("WAIT_win0").style.visibility == "hidden") {
-           //console.log("why did reload")
+            //console.log("why did reload")
            
             //if it was changing the term because of a bookmark load
             if (changing_term) {
@@ -164,6 +160,11 @@ function oniFrameChange() {
            // 
            
 
+        }
+        //this is for when the user does an invalid search
+        else if (!iframe.contentWindow.document.getElementById("save_button") && iframe.contentWindow.document.getElementById("win0divDERIVED_CLSMSG_ERROR_TEXT") && iframe.contentWindow.document.getElementById("win0divDERIVED_CLSMSG_ERROR_TEXT").textContent && iframe.contentWindow.document.getElementById("WAIT_win0").style.visibility == "hidden") {
+            onFrameLoaded();
+            //console.log('reload because of search error');
         }
     }
     //if on results page
