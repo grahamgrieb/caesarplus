@@ -1,7 +1,7 @@
 {
     "name": "Caesar+",
     "description": "Make Caesar class search better",
-    "version": "1.71",
+    "version": "1.72",
     "manifest_version": 2,
     "permissions": [
         "storage"
