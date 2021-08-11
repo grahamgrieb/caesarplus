@@ -1,1 +1,1 @@
-To install on your local Chrome browser: go to chrome://extensions, select "Load Unpacked" in the top left, and select the folder of the extension
+Extension can be downloaded at https://chrome.google.com/webstore/detail/caesar%20/ojhjjbkkofkjbccckpaffhbiecaeeanb. To install unpacked: go to chrome://extensions, select "Load Unpacked" in the top left, and select the folder of the extension
