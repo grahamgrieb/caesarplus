@@ -79,11 +79,11 @@ function onFrameLoaded() {
     if (iframe.contentWindow.document.getElementById("pt_pageinfo_win0").getAttribute('page') == "SSR_CLSRCH_ENTRY") {
        //console.log("search page");
         //adds buttons and selector
-        iframe.contentWindow.document.getElementById("win0div$ICField143").outerHTML = `</br><div style="width:600px;"><div style="display: flex; justify-content: center;"><label class="PSDROPDOWNLABEL">Bookmarks </label>
-                                                                                    <a role="presentation" class="PSPUSHBUTTON Left"><span style="background-Color: transparent;"><input type="button" id="save_button" tabindex="995" value="Save" class="PSPUSHBUTTON" style="width:50px;"> </span></a>
+        iframe.contentWindow.document.getElementById("win0div$ICField143").outerHTML = `</br><div style="width:600px;"><div style="display: flex; justify-content: center;"><label style="align-self: center;" class="PSDROPDOWNLABEL">Bookmarks</label>
+                                                                                    <a role="presentation"  style="margin-left:3px;" class="PSPUSHBUTTON Left"><span style="background-Color: transparent;"><input type="button" id="save_button" tabindex="995" value="Save" class="PSPUSHBUTTON" style="width:50px;"> </span></a>
                                                                                     <a role="presentation" class="PSPUSHBUTTON Left"><span style="background-Color: transparent;"><input type="button" id="load_button" tabindex="995" value="Load" class="PSPUSHBUTTON" style="width:50px;"></span></a>
                                                                                         <select class="PSDROPDOWNLIST" id="bookmarks" style="width:220px; "></select>
-                                                                                        <a role="presentation" class="PSPUSHBUTTON Left"><span style="background-Color: transparent;"><input type="button" id="remove_button" tabindex="995" value="Delete" class="PSPUSHBUTTON" style="width:50px;"></span></a></div></div>`;
+                                                                                        <a role="presentation" style="margin-left:5px;" class="PSPUSHBUTTON Left"><span style="background-Color: transparent;"><input type="button" id="remove_button" tabindex="995" value="Delete" class="PSPUSHBUTTON" style="width:50px;"></span></a></div></div>`;
 
         iframe.contentWindow.document.getElementById("save_button").onclick = saveButton;
         iframe.contentWindow.document.getElementById("load_button").addEventListener("click", loadButton);
