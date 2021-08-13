@@ -1,5 +1,5 @@
 //console.log("hello");
-//chrome.storage.local.clear();
+//browser.storage.local.clear();
 var amount;
 var iframe;
 var changing_term = false;
@@ -11,7 +11,7 @@ var current_value;
 
 class SearchBookmark {
     constructor(subjectId, subjectName, courseSelector, courseNumber, career, open, keyword, term, startSelector, startNumber, endSelector, endNumber, days, mon, tues, wed, thurs, fri,sat,sun, instructNameSelector, instructName, classNbr, campus, courseComp, session, attribute,attributeValue) {
-        //console.log(arguments.length)
+        //console.log("constructor "+arguments.length)
         this.subjectId = subjectId;
         this.subjectName = subjectName;
         this.courseSelector = courseSelector;
@@ -80,12 +80,12 @@ function onFrameLoaded() {
        //console.log("search page");
         //adds buttons and selector
         iframe.contentWindow.document.getElementById("win0div$ICField143").outerHTML = `</br><div style="width:600px;"><div style="display: flex; justify-content: center;"><label style="align-self: center;" class="PSDROPDOWNLABEL">Bookmarks</label>
-                                                                                    <a role="presentation"  style="margin-left:3px;" class="PSPUSHBUTTON Left"><span style="background-Color: transparent;"><input type="button" id="save_button" tabindex="995" value="Save" class="PSPUSHBUTTON" style="width:50px;"> </span></a>
-                                                                                    <a role="presentation" class="PSPUSHBUTTON Left"><span style="background-Color: transparent;"><input type="button" id="load_button" tabindex="995" value="Load" class="PSPUSHBUTTON" style="width:50px;"></span></a>
+                                                                                    <a role="presentation"  style="margin-left:3px;" class="PSPUSHBUTTON Left"><span style="background-Color: transparent;"><input type="button" id="save_button" tabindex="995" value="Save" onfocus="var a;" class="PSPUSHBUTTON" style="width:50px;"> </span></a>
+                                                                                    <a role="presentation" class="PSPUSHBUTTON Left"><span style="background-Color: transparent;"><input type="button" id="load_button" tabindex="995" value="Load" onfocus="var a;" class="PSPUSHBUTTON" style="width:50px;"></span></a>
                                                                                         <select class="PSDROPDOWNLIST" id="bookmarks" style="width:220px; "></select>
-                                                                                        <a role="presentation" style="margin-left:5px;" class="PSPUSHBUTTON Left"><span style="background-Color: transparent;"><input type="button" id="remove_button" tabindex="995" value="Delete" class="PSPUSHBUTTON" style="width:50px;"></span></a></div></div>`;
+                                                                                        <a role="presentation" style="margin-left:5px;" class="PSPUSHBUTTON Left"><span style="background-Color: transparent;"><input type="button" id="remove_button" tabindex="995" value="Delete" onfocus="var a;" class="PSPUSHBUTTON" style="width:50px;"></span></a></div></div>`;
 
-        iframe.contentWindow.document.getElementById("save_button").onclick = saveButton;
+        iframe.contentWindow.document.getElementById("save_button").onclick = saveButton; 
         iframe.contentWindow.document.getElementById("load_button").addEventListener("click", loadButton);
         iframe.contentWindow.document.getElementById("remove_button").onclick = removeButton;
        
@@ -94,9 +94,9 @@ function onFrameLoaded() {
 
 
         //when the bookmark storage is changed call onItemChanged()
-        chrome.storage.local.onChanged.addListener(onItemChanged);
+        browser.storage.onChanged.addListener(onItemChanged);
         //call onItemChanged to set up the initial selector list
-        onItemChanged();
+        onItemChanged(); 
         //when the iframe is changed call oniFrameChange
 
         frameobserver.observe(iframe.contentWindow.document, observerOptions);
@@ -169,7 +169,7 @@ function oniFrameChange() {
     }
     //if on results page
     else if (iframe.contentWindow.document.getElementById("pt_pageinfo_win0").getAttribute('page') == "SSR_CLSRCH_RSLT" && iframe.contentWindow.document.getElementById("WAIT_win0").style.visibility == "hidden"  ){
-        if (!iframe.contentWindow.document.getElementById("tabbutton0")) {
+        if (!iframe.contentWindow.document.getElementById("morebutton0")) {
             //console.log("results page")
 
             resultsPage()
@@ -202,7 +202,7 @@ function saveButton() {
     else {
         bookmark = new SearchBookmark(iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SUBJECT_SRCH$0").selectedIndex, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SUBJECT_SRCH$0").options[iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SUBJECT_SRCH$0").selectedIndex].text, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_EXACT_MATCH1$1").selectedIndex, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_CATALOG_NBR$1").value, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_ACAD_CAREER$2").selectedIndex, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_SSR_OPEN_ONLY$3").checked, iframe.contentWindow.document.getElementById("SSR_CLSRCH_WRK_DESCR$4").value, iframe.contentWindow.document.getElementById("CLASS_SRCH_WRK2_STRM$35$").selectedIndex)
     }
-    chrome.storage.local.set({
+    browser.storage.local.set({
         [amount]: bookmark
     },
         function (result) {
@@ -214,7 +214,7 @@ function saveButton() {
 }
 function loadButton(){
     const ind =iframe.contentWindow.document.getElementById("bookmarks").options[iframe.contentWindow.document.getElementById("bookmarks").selectedIndex].value;
-    chrome.storage.local.get(ind, function (result) {
+    browser.storage.local.get(ind, function (result) {
         //console.log("loading ")
         //console.log(result)
         current_value=result[ind];
@@ -308,14 +308,14 @@ function removeButton() {
 
     const remove_ind = iframe.contentWindow.document.getElementById("bookmarks").options[iframe.contentWindow.document.getElementById("bookmarks").selectedIndex].value;
     //console.log('remove ' + remove_ind);
-    chrome.storage.local.remove(remove_ind);
+    browser.storage.local.remove(remove_ind);
 }
 
 
 function onItemChanged() {
     //console.log("changed");
 
-    chrome.storage.local.get(null, function (result) {
+    browser.storage.local.get(null, function (result) {
         //console.log(result);
         
         
@@ -362,13 +362,13 @@ function resultsPage() {
     var ind = 0;
     iframe.contentWindow.document.querySelectorAll('*[id^="ACE_SSR_CLSRSLT_WRK_GROUPBOX3$"]').forEach(elem => {
         iframe.contentWindow.document.getElementById(`DERIVED_CLSRCH_DESCRLONG$${ind}`).innerHTML += `<div id="extra_info${ind}"></div>`;
-        elem.outerHTML += `<a id="morebutton${ind}" tabindex="995"  style="width:60px; margin-right:13px;" class="PSHYPERLINK">More Info</a><a id="tabbutton${ind}" tabindex="995"  style="width:100px;" class="PSHYPERLINK">Open in New Tab</a>`;
+        elem.outerHTML += `<a id="morebutton${ind}" tabindex="995"  style="width:60px; margin-right:13px;" class="PSHYPERLINK">More Info</a>`;//<a id="tabbutton${ind}" tabindex="995"  style="width:100px;" class="PSHYPERLINK">Open in New Tab</a>`;
         //elem.outerHTML += `<a role="presentation" class="PSPUSHBUTTON Left"><span style="background-Color: transparent;"><input type="button" id="morebutton${ind}" tabindex="995" value="More Info" class="PSPUSHBUTTON" style="width:60px;"></input></span></a>    <a role="presentation" class="PSPUSHBUTTON Left"><span style="background-Color: transparent;"><input type="button" id="tabbutton${ind}" tabindex="995" value="Open in New Tab" class="PSPUSHBUTTON" style="width:100px;"></input></span></a>`;
-        iframe.contentWindow.document.getElementById(`tabbutton${ind}`).onclick = (function (ind) {
+        /*iframe.contentWindow.document.getElementById(`tabbutton${ind}`).onclick = (function (ind) {
             return function () {
                 newTab(ind);
             }
-        })(ind);
+        })(ind);*/
         iframe.contentWindow.document.getElementById(`morebutton${ind}`).onclick = (function (ind) {
             return function () {
                 moreInfo(ind);
@@ -401,8 +401,9 @@ function newTab(ind) {
         newTab.getElementById("NW_DERIVED_SS_NW_LINK_INST_CTEC$0").outerHTML="";
         newTab.getElementById("DERIVED_REGFRM1_TITLE1").innerText+="- ALL LINKS HAVE BEEN REMOVED";
         newTab.title=`${newTab.getElementById("DERIVED_CLSRCH_DESCR200").innerText}`;
-        var wnd = window.open("");
-        wnd.document.write(newTab.documentElement.outerHTML);
+        let wnd = window.open("");
+        //wnd.document.write(newTab.documentElement.outerHTML);
+       // wnd.document.body.outerHTML=newTab.documentElement.outerHTML;
 
         //console.log("loaded new tab")
 
