@@ -1,4 +1,4 @@
-Extension can be downloaded on the Chrome Web Store [here]<https://chrome.google.com/webstore/detail/caesar%20/ojhjjbkkofkjbccckpaffhbiecaeeanb>. To install unpacked: go to chrome://extensions, select "Load Unpacked" in the top left, and select the folder of the extension.
+Extension can be downloaded on the Chrome Web Store [here](https://chrome.google.com/webstore/detail/caesar%20/ojhjjbkkofkjbccckpaffhbiecaeeanb). To install unpacked: go to chrome://extensions, select "Load Unpacked" in the top left, and select the folder of the extension.
 
 Improve Caesar class search
 This extension improves Northwestern University's Caesar class search functionality. It adds:
